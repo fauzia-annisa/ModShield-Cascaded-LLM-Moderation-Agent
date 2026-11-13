@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: modshield}
+spec:
+  replicas: 2
+  selector: {matchLabels: {app: modshield}}
+  template:
+    metadata: {labels: {app: modshield}}
+    spec:
+      containers:
+      - name: api
+        image: modshield:latest
+        ports: [{containerPort: 8000}]
+        readinessProbe: {httpGet: {path: /health, port: 8000}}
+        resources: {requests: {cpu: "500m", memory: 1Gi}, limits: {memory: 2Gi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: modshield}
+spec:
+  selector: {app: modshield}
+  ports: [{port: 80, targetPort: 8000}]
