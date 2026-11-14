@@ -32,7 +32,7 @@ False-positive rate on non-toxic comments that mention a group (keyword proxy, f
 | women | 2198 | 0.084 | 0.050 |
 | mental illness | 143 | 0.140 | 0.056 |
 
-BERT lowers FPR for most groups compared with LR, but comments mentioning race are flagged roughly 8-9x more than average. Groups are detected by keyword, so this is a proxy; small groups have wide error bars.
+BERT lowers FPR for most groups compared with LR. The exception is comments mentioning race ("black people", "white people", "African American"), flagged at 23-27% vs 3.0% overall. I read the 15 highest-scoring false positives for the "black" group: most are non-toxic comments that discuss racism, white supremacy or the KKK, so the model appears to react to sensitive topics rather than to the identity term alone. This is a known failure mode of toxicity classifiers: condemning hate speech looks like hate speech. Mitigations I would try: counterfactual augmentation (swap identity terms), training on non-toxic comments that mention groups, and an LLM stage with a policy that explicitly allows discussion of offensive content. Caveats: keyword-based grouping, small samples (n=164-175), and I only reviewed the top 15 errors. Groups are detected by keyword, so this is a proxy; small groups have wide error bars.
 
 ## Failure analysis
 - Mild insults near the label cutoff are flagged but labeled non-toxic ("Cherry is a troll.", "I'm a silly dude.").
